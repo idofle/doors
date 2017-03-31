@@ -1,0 +1,173 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+<meta content="IE=edgechrome=1" http-equiv="X-UA-Compatible" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=10.0, user-scalable=1" name="viewport" />
+<title>Challenge: API Construction and Integration</title>
+<style>
+*, *:before, *:after { box-sizing: border-box; }
+body { margin: 0 auto; width: 100%; font-family: Helvetica, Tahoma, Arial, sans-serif; background: #f3f3f3;}
+.widget { width: 100%; border: 1px solid #b3b3b3; border-radius: 11px; background: white; padding: 20px; max-width: 540px; margin: 20px 10px; display: inline-block; vertical-align: top; }
+h3 { margin: 0 0 20px; font-weight: lighter; font-size: 2rem; color: #8c8c8c; }
+strong { text-transform: uppercase; display: block; margin-top: 10px; font-size: 0.9rem; font-weight: bold; }
+th { text-align: left; background: #000; color: #fff; padding: 4px 7px; text-transform: lowercase; font-size: 0.9rem; letter-spacing: 0.02em; }
+td { padding: 3px 7px; }
+table { width: 100%; border-collapse: collapse; }
+input[type="text"] { width: 100%; display: block; padding: 7px; font-size: 1rem; }
+select { width: 50%; display: block; margin: 10px 0; }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+</head>
+<script>
+
+
+	var socket = io();
+	socket.on('user added', function(user){
+	  console.log("user was added.", user); // add it to the page
+	});
+	socket.on('data:users', function(users){
+	  console.log("users were loaded", users); // add it to the page
+	});
+	socket.on('data:doors', function(doors){
+	  console.log("doors were loaded", doors); // add it to the page
+	});
+	socket.on('data:buildings', function(buildings){
+	  console.log("buildings were loaded", buildings); // add it to the page
+	});
+
+	$(document).ready(function () {
+ 		// code here
+ 		$("#addUserForm").submit(function(e) {
+			e.preventDefault(); 
+			console.log("WebApp: send user");
+			let formDetails = $('#addUserForm').serialize();
+			// $.ajax({
+			//     url: '/adduser', 
+			//     type: 'POST', 
+			//     //contentType: 'application/json', 
+			//     data: formDetails
+			// });
+			$.post('/adduser', formDetails);
+		});
+	});
+
+	
+	
+</script>
+<body>
+  <!-- type: user_new -->
+  <div class="widget">
+    <h3>Grant Access</h3>
+    <form id="addUserForm">
+      <input type="text" placeholder="Name" name="name" />
+      <select name="type">
+        <option value="user">User</option>
+        <option value="issuer">Issuer</option>
+        <option value="admin">Admin</option>
+      </select>
+      <select name="doors">
+        <option value="1">Door 1</option>
+        <!-- This select should be populated by a
+             list of doors provided by the API -->
+      </select>
+      <input type="submit" value="Submit" />
+    </form>
+  </div>
+
+  <!-- type: doors -->
+  <div class="widget">
+    <h3>Doors</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Entrance</td>
+          <td>Front Door</td>
+        </tr>
+        <tr>
+          <td>Office</td>
+          <td>Boardroom</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- type: users -->
+  <div class="widget -half">
+    <h3>Users</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Doors</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Bruno Schmidt</td>
+          <td>Front Door, Boardroom</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- type: buildings -->
+  <div class="widget">
+    <h3>Buildings</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Address</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Volcano Lair</td>
+          <td>13 Pacific Ocean</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- type: user_detail -->
+  <div class="widget">
+    <h3>Bruno Schmidt</h3>
+    <p>
+      <strong>Type</strong> User<br />
+      <strong>Doors</strong> Front Door, Boardroom<br />
+      <strong>Buildings</strong> Volcano Lair
+    </p>
+  </div>
+
+  <!-- type: building_detail -->
+  <div class="widget">
+    <h3>Volcano Lair</h3>
+    <p>
+      <strong>Users</strong> Bruno Schmidt<br />
+      <strong>Doors</strong> Front Door, Boardroom<br />
+      <strong>Address</strong> 13 Pacific Ocean, Indonesia
+    </p>
+  </div>
+
+  <!-- type: door_detail -->
+  <div class="widget">
+    <h3>Front Door</h3>
+    <p>
+      <strong>Building</strong> Volcano Lair<br />
+      <strong>Address</strong> 13 Pacific Ocean, Indonesia<br />
+      <strong>Users</strong> Bruno Schmidt
+      <strong>Admins</strong> Bruno Venus
+      <strong>Issuers</strong> Bruno Vesuvius
+    </p>
+  </div>
+</body>
+</html>

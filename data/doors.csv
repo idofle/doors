@@ -1,0 +1,12 @@
+Id,Door Name,Type,Building
+1,Entrance,Entrance,1
+2,Back Door,Office,2
+3,Parking,Garage,1
+4,Roof Access,House,1
+5,Penthouse,Aparment,2
+6,Dad's Place,House,3
+7,Uncle's Place,House,4
+8,Son's Place,Apartment,2
+9,Meeting Room 1,Office,2
+11,Boardroom,Office,2
+12,Home Parking,Garage,1
